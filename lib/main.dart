@@ -27,7 +27,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final CounterBloc _counterBloc = CounterBloc(initialCount: 0);
+  final CounterBloc _counterBloc = CounterBloc(initialCount: 0, testModel: TestModel());
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +43,13 @@ class _MyHomePageState extends State<MyHomePage> {
                   builder: (context, AsyncSnapshot<int> snapshot) {
                     return Text('${snapshot.data}',
                         style: Theme.of(context).textTheme.bodyMedium);
-                  })
+                  }),
+              StreamBuilder(
+                  stream: _counterBloc.testModelObservable,
+                  builder: (context, AsyncSnapshot<TestModel> snapshot) {
+                    return Text('${snapshot.data?.count ?? ''}',
+                        style: Theme.of(context).textTheme.bodyMedium);
+                  }),
             ],
           ),
         ),
@@ -60,6 +66,11 @@ class _MyHomePageState extends State<MyHomePage> {
             onPressed: _counterBloc.decrement,
             tooltip: 'Decrement',
             child: const Icon(Icons.remove),
+          ),
+          FloatingActionButton(
+            onPressed: _counterBloc.incrementModel,
+            tooltip: 'ads click',
+            child: const Icon(Icons.ads_click),
           ),
         ]));
   }
